@@ -1,0 +1,44 @@
+def encrypt(plaintext,key):
+  ciphertext = "".join(chr((ord(p) - ord('a') + ord(k) - ord('a')) % 26 + ord('a')) for p, k in zip(plaintext, key))
+  return ciphertext
+ 
+def decrypt(ciphertext, key):
+  decrypted_text = "".join(chr((ord(c) - ord('a') - (ord(k) - ord('a'))) % 26 + ord('a')) for c, k in zip(ciphertext, key))
+  return decrypted_text
+
+data = input("Enter the plaintext:").lower()
+key = input(f"Enter the key of length {len(data)}:").lower()
+encrypted_data = encrypt(data,key)
+print("Ciphertext:", encrypted_data)
+decrypted_data = decrypt(encrypted_data,key)
+print("Decrypted text:", decrypted_data)
+
+
+    ----
+
+public class VernamCipher {
+    public static void main(String[] args) {
+        String text, key, output = "", dec = "";
+        char t, k;
+        int x;
+        Scanner s = new Scanner(System.in);
+        System.out.println("Enter text to Encrypt/Decrypt:");
+        text = s.nextLine();
+        System.out.println("Enter any key of length " + text.length());
+        key = s.nextLine();
+        for (int i = 0; i < text.length(); i++) {
+            t = text.charAt(i);
+            k = key.charAt(i);
+            x = t ^ k;
+            output += (char) (x + 96);
+        }
+        System.out.println("Encrypted Text is:" + output);
+        for (int i = 0; i < output.length(); i++) {
+            t = output.charAt(i);
+            k = key.charAt(i);
+            x = t ^ k;
+            dec += (char) (x + 96);
+        }
+        System.out.println("Decrypted Text is:" + dec);
+    }
+}
