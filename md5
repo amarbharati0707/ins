@@ -1,0 +1,79 @@
+# Sender
+import hashlib
+print("Enter the message to be sent: ")
+try:
+    input_str = input()
+    buffer = bytes(input_str, 'utf-8')
+    with open("abc.txt", "wb") as f:
+        md5 = hashlib.md5()
+        md5.update(buffer)
+        f.write(input_str.encode())
+        f.write(md5.digest())
+    print("Message sent successfully!!!!!!!!!")
+except Exception as e:
+    print(e)
+# Receiver
+import hashlib
+with open("abc.txt", "rb") as f:
+    data = f.read()
+    print(data[:-16].decode())
+    md5 = hashlib.md5()
+    md5.update(data[:-16])
+    # print(md5.digest())
+    # print(data[-16:])
+    if md5.digest() == data[-16:]:
+        print("Message received successfully!!!!!!!!!!")
+    else:
+        print("Message tampered!!!!!!!!!!!!!!!!!")
+
+Sender 
+// Message Digestion
+import java.io.*;
+import java.security.*;
+import java.util.Scanner;
+
+public class Send {
+    public static void main(String args[]) {
+        System.out.println("Enter the message to be send: ");
+        try {
+            Scanner sc = new Scanner(System.in);
+            String input = sc.nextLine();
+            byte buffer[] = new byte[input.length()];
+            FileOutputStream fos = new FileOutputStream("abc.txt");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            buffer = input.getBytes();
+            md.update(buffer);
+            oos.writeObject(input);
+            oos.writeObject(md.digest());
+            System.out.println("Message send successfully!!!!!!!!!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+Receiver
+import java.io.*;
+import java.security.*;
+
+public class Receive {
+    public static void main(String args[]) {
+        byte dig[] = new byte[1024];
+        try {
+            FileInputStream fis = new FileInputStream("abc.txt");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            Object obj = ois.readObject();
+            String data = (String) obj;
+            System.out.println("Received Data:" + data);
+            obj = ois.readObject();
+            dig = (byte[]) obj;
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(data.getBytes());
+            if (MessageDigest.isEqual(md.digest(), dig))
+                System.out.println(data + " Retrieved Successfully!!!!!!!!");
+            ois.close();
+        } catch (Exception e) {
+            System.out.println("Message is Corrupted!!!!!!!!!");
+        }
+    }
+}
