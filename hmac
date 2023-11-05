@@ -1,0 +1,38 @@
+import hashlib
+import hmac
+import secrets
+
+data = input("Enter data: ").encode('utf-8')
+key = secrets.token_bytes(100)
+hmac_sha1 = hmac.new(key, data, hashlib.sha1)
+result = hmac_sha1.digest()
+redd = hmac_sha1.hexdigest()
+
+print(data.decode())
+print("Signature using HMAC SHA1:", result)
+
+
+  --
+
+import java.security.SecureRandom;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.util.Scanner;
+
+public class HMAC {
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter data: ");
+        String data = sc.nextLine();
+        SecureRandom rnd = new SecureRandom();
+        byte[] k = new byte[100];
+        rnd.nextBytes(k);
+        SecretKeySpec key = new SecretKeySpec(k, "HMACSHA1");
+        // System.out.println("Key: "+key.getEncoded());
+        Mac m = Mac.getInstance("HMACSHA1");
+        m.init(key);
+        m.update(data.getBytes());
+        byte[] result = m.doFinal();
+        System.out.println("Signature using HMACSHA1: " + new String(result));
+    }
+}
