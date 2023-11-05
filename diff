@@ -1,0 +1,40 @@
+import math
+q = int(input("Enter a prime no.q: "))
+alpha = int(input("Enter Primitive Root alpha, such that alpha<q: "))
+Xa = int(input("Enter the value of Xa: "))
+Xb = int(input("Enter the value of Xb: "))
+
+Ya = int(math.pow(alpha, Xa) % q)
+Yb = int(math.pow(alpha, Xb) % q)
+Ka = int(math.pow(Yb, Xa) % q)
+Kb = int(math.pow(Ya, Xb) % q)
+
+if Ka == Kb:
+    print("Keys matched!!!")
+else:
+    print("Keys not matched!!!")
+--
+
+import java.util.*;
+
+class DiffieHellman {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter a prime no.q:");
+        int q = sc.nextInt();
+        System.out.println("Enter Primitive Root alpha, such that alpha<q");
+        int alpha = sc.nextInt();
+        System.out.println("Enter the value of Xa");
+        int Xa = sc.nextInt();
+        System.out.println("Enter the value of Xb");
+        int Xb = sc.nextInt();
+        int Ya = (int) ((Math.pow(alpha, Xa)) % q);
+        int Yb = (int) ((Math.pow(alpha, Xb)) % q);
+        int Ka = (int) ((Math.pow(Yb, Xa)) % q);
+        int Kb = (int) ((Math.pow(Ya, Yb)) % q);
+        if (Ka == Kb)
+            System.out.println("Keys matched!!!");
+        else
+            System.out.println("Keys not matched!!!");
+    }
+}
