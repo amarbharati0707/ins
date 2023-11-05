@@ -1,0 +1,120 @@
+mapping = {
+    'a': 'q',
+    'b': 'w',
+    'c': 'e',
+    'd': 'r',
+    'e': 't',
+    'f': 'y',
+    'g': 'u',
+    'h': 'i',
+    'i': 'o',
+    'j': 'p',
+    'k': 'a',
+    'l': 's',
+    'm': 'd',
+    'n': 'f',
+    'o': 'g',
+    'p': 'h',
+    'q': 'j',
+    'r': 'k',
+    's': 'l',
+    't': 'z',
+    'u': 'x',
+    'v': 'c',
+    'w': 'v',
+    'x': 'b',
+    'y': 'n',
+    'z': 'm'
+}
+def encrypt(plaintext):
+    ciphertext = ''
+    for char in plaintext:
+        if char in mapping:
+            ciphertext += mapping[char]
+        else:
+            ciphertext += char
+    return ciphertext
+
+def decrypt(ciphertext):
+    plaintext = ''
+    for char in ciphertext:
+        if char in mapping.values():
+            plaintext += list(mapping.keys())[list(mapping.values()).index(char)]
+        else:
+            plaintext += char
+    return plaintext
+
+a=input("Enter a string: ")
+encryption = encrypt(a.lower())
+decryption = decrypt(encryption)
+print(encryption)
+print(decryption)
+
+
+------
+
+
+import java.util.*;
+
+public class MonoAlpha {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter plaintext: ");
+        String plaintext = sc.nextLine();
+        String lower = "abcdefghijklmnopqrstuvwxyz";
+        String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        ArrayList<Integer> p = new ArrayList();
+        for (int i = 0; i < 26; i++)
+            p.add(i);
+        Collections.shuffle(p);
+        for (int i = 0; i < 26; i++) {
+            System.out.print(p.get(i) + " ");
+        }
+        String key = "", KEY = "";
+        for (int i = 0; i < 26; i++) {
+            key += lower.charAt(p.get(i));
+            KEY += upper.charAt(p.get(i));
+        }
+        String ciphertext = "";
+        int i, j;
+        // encryption
+        for (i = 0; i < plaintext.length(); i++) {
+            for (j = 0; j < lower.length(); j++) {
+                if (plaintext.charAt(i) == lower.charAt(j)) {
+                    ciphertext += key.charAt(j);
+                    break;
+                }
+                if (plaintext.charAt(i) == lower.charAt(j)) {
+                    ciphertext += KEY.charAt(j);
+                    break;
+                }
+            }
+            if (j == upper.length())
+                ciphertext += plaintext.charAt(i);
+        }
+        // decryption
+        String decryptedtext = "";
+        i = 0;
+        j = 0;
+        for (i = 0; i < ciphertext.length(); i++) {
+            for (j = 0; j < key.length(); j++) {
+                if (ciphertext.charAt(i) == key.charAt(j)) {
+                    decryptedtext += lower.charAt(j);
+                    break;
+                }
+                if (plaintext.charAt(i) == KEY.charAt(j)) {
+                    decryptedtext += upper.charAt(j);
+                    break;
+                }
+            }
+            if (j == KEY.length())
+                decryptedtext += ciphertext.charAt(i);
+        }
+        System.out.println("\nMonoalphabetic Cipher ");
+        System.out.println("Plain Text : " + plaintext);
+        System.out.println("key : " + key);
+        System.out.println("KEY : " + KEY);
+        System.out.println("Cipher Text : " + ciphertext);
+        System.out.println("Decrypted Text : " + decryptedtext);
+    }
+}
