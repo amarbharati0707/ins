@@ -1,0 +1,92 @@
+import base64
+from Crypto.Cipher import DES
+import random
+import string
+
+def pad_message(message):
+    while len(message) % 8 != 0:
+        message += ' '
+    return message
+
+def encrypt_message(key, message):
+    cipher = DES.new(key.encode(), DES.MODE_ECB)
+    message = pad_message(message).encode()
+    encrypted = cipher.encrypt(message)
+    return base64.b64encode(encrypted).decode()
+
+def decrypt_message(key, encrypted):
+    cipher = DES.new(key.encode(), DES.MODE_ECB)
+    encrypted = base64.b64decode(encrypted.encode())
+    decrypted = cipher.decrypt(encrypted)
+    return decrypted.decode().rstrip()
+
+key = ''.join(random.choices(string.ascii_lowercase, k=8))
+message = input("Enter the Message: ")
+encrypted = encrypt_message(key, message)
+decrypted = decrypt_message(key, encrypted)
+print('Encrypted message:', encrypted)
+print('Decrypted message:', decrypted)
+
+# Install pycryptodome using : pip install pycryptodome
+
+---
+
+import java.util.Scanner;
+import javax.crypto.*;
+
+public class DES {
+    Cipher ecipher, dcipher;
+
+    public static void main(String args[]) {
+        System.out.println("Enter any String: ");
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        try {
+            KeyGenerator k = KeyGenerator.getInstance("DES");
+            SecretKey key = k.generateKey();
+            DES en = new DES(key);
+            String ct = en.encrypt(input);
+            String decrypted = en.decrypt(ct);
+            System.out.println("Original string is:" + input);
+            System.out.println("Encrypted string is;" + ct);
+            System.out.println("Decrypted string is:" + decrypted);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public DES(SecretKey key) {
+        try {
+            ecipher = Cipher.getInstance("DES");
+            ecipher.init(Cipher.ENCRYPT_MODE, key);
+            dcipher = Cipher.getInstance("DES");
+            dcipher.init(Cipher.DECRYPT_MODE, key);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public String encrypt(String str) {
+        try {
+            byte[] b = str.getBytes();
+            byte[] enc = ecipher.doFinal(b);
+            return new String(enc);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public String decrypt(String str) {
+        try {
+            byte[] b = str.getBytes();
+            byte[] dec = dcipher.doFinal(b);
+            return new String(dec);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+}
+
+
