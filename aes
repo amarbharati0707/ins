@@ -3,7 +3,6 @@ import base64
 import random
 import string
 
-# Encryption function
 def encrypt(message, key):
     padded_message = message + (16 - len(message) % 16) * chr(16 - len(message) % 16)
     cipher = AES.new(key.encode(), AES.MODE_ECB)
@@ -11,7 +10,6 @@ def encrypt(message, key):
     encoded_message = base64.b64encode(encrypted_message).decode()
     return encoded_message
 
-# Decryption function
 def decrypt(encoded_message, key):
     encrypted_message = base64.b64decode(encoded_message)
     cipher = AES.new(key.encode(), AES.MODE_ECB)
@@ -33,6 +31,9 @@ print('Decrypted message:', decrypted_message)
 
 import java.util.Scanner;
 import javax.crypto.*;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.SecureRandom;
+import java.nio.charset.StandardCharsets;
 
 public class AES {
     Cipher ecipher, dcipher;
@@ -42,48 +43,60 @@ public class AES {
         Scanner sc = new Scanner(System.in);
         String input = sc.nextLine();
         try {
-            KeyGenerator k = KeyGenerator.getInstance("AES");
-            SecretKey key = k.generateKey();
+            // Generate or load a secure key
+            SecretKey key = generateAESKey();
+
             AES en = new AES(key);
             String ct = en.encrypt(input);
             String decrypted = en.decrypt(ct);
-            System.out.println("Original string is:" + input);
-            System.out.println("Encrypted string is;" + ct);
-            System.out.println("Decrypted string is:" + decrypted);
+            System.out.println("Original string is: " + input);
+            System.out.println("Encrypted string is: " + ct);
+            System.out.println("Decrypted string is: " + decrypted);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
     public AES(SecretKey key) {
         try {
-            ecipher = Cipher.getInstance("AES");
+            ecipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             ecipher.init(Cipher.ENCRYPT_MODE, key);
-            dcipher = Cipher.getInstance("AES");
+            dcipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             dcipher.init(Cipher.DECRYPT_MODE, key);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
     public String encrypt(String str) {
         try {
-            byte[] b = str.getBytes();
+            byte[] b = str.getBytes(StandardCharsets.UTF_8);
             byte[] enc = ecipher.doFinal(b);
-            return new String(enc);
+            return new String(enc, StandardCharsets.ISO_8859_1);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
         return null;
     }
 
     public String decrypt(String str) {
         try {
-            byte[] b = str.getBytes();
+            byte[] b = str.getBytes(StandardCharsets.ISO_8859_1);
             byte[] dec = dcipher.doFinal(b);
-            return new String(dec);
+            return new String(dec, StandardCharsets.UTF_8);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static SecretKey generateAESKey() {
+        try {
+            KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+            keyGen.init(128);
+            return keyGen.generateKey();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
